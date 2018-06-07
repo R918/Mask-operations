@@ -3,7 +3,9 @@
 #include <opencv2/imgproc.hpp>
 #include <iostream>
 
-using namespace std;
+using std::cout;
+using std::cin;
+using std::endl;
 using namespace cv;
 
 static void help(char* progName)
@@ -19,7 +21,32 @@ void Sharpen(const Mat& myImage, Mat& Result);
 
 int main(int argc, char* argv[])
 {
-	const char* filename = argc >= 2 ? argv[1] : "Lena.png";
+	double alpha = 0.5, beta, input;
+	Mat src1, src2, dst;
+	cout << "Simple Linear Blender" << endl;
+	cout << "---------------------" << endl;
+	cout << "* Enter alpha [0.0 - 1.0]:	" << endl;
+	cin >> input;
+	if (input >= 0 && input <= 1)
+		alpha = input;
+	src1 = imread("LinuxLogo.jpg");
+	src2 = imread("WindowsLogo.jpg");
+	
+	if (src1.empty())
+	{
+		cout << "Error loading src1\n";
+		return -1;
+	}
+	if (src2.empty())
+	{
+		cout << "Error loading src2\n";
+		return -1;
+	}
+	beta = (1.0 - alpha);
+	addWeighted(src1, alpha, src2, beta, 0.0, dst);
+	imshow("Linear Blend", dst);
+	waitKey(100000);
+	/*const char* filename = argc >= 2 ? argv[1] : "Lena.png";
 	Mat img = imread(filename, IMREAD_COLOR);
 	namedWindow("Input", WINDOW_AUTOSIZE);
 	imshow("Input", img);
@@ -40,7 +67,7 @@ int main(int argc, char* argv[])
 	Mat smallImg = img(r);
 	namedWindow("SmallImage", WINDOW_AUTOSIZE);
 	imshow("SmallImage", smallImg);
-	waitKey();
+	waitKey();*/
 	/*help(argv[0]);
 	const char* filename = argc >= 2 ? argv[1] : "Lena.png";
 	
