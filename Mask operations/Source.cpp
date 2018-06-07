@@ -19,7 +19,29 @@ void Sharpen(const Mat& myImage, Mat& Result);
 
 int main(int argc, char* argv[])
 {
-	help(argv[0]);
+	const char* filename = argc >= 2 ? argv[1] : "Lena.png";
+	Mat img = imread(filename, IMREAD_COLOR);
+	namedWindow("Input", WINDOW_AUTOSIZE);
+	imshow("Input", img);
+	
+	Scalar intensity = img.at<uchar>(0, 0);
+	Vec3b intensity1 = img.at<Vec3b>(0, 0);
+	cout << "intensity : " << intensity << "  1:" << intensity1 << endl;
+	uchar blue = intensity1.val[0];
+	uchar green = intensity1.val[1];
+	uchar red = intensity1.val[2];
+	cout << intensity.val[0] << "  " << intensity.val[1] << " " << intensity.val[2] << endl
+		<< "blue: " << blue << "green: " << green << "red:	" << red;
+	Mat sobelx;
+	Sobel(img, sobelx, CV_32F, 1, 0);
+	namedWindow("Sobel", WINDOW_AUTOSIZE);
+	imshow("Sobel", sobelx);
+	Rect r(20, 20, 100, 100);
+	Mat smallImg = img(r);
+	namedWindow("SmallImage", WINDOW_AUTOSIZE);
+	imshow("SmallImage", smallImg);
+	waitKey();
+	/*help(argv[0]);
 	const char* filename = argc >= 2 ? argv[1] : "Lena.png";
 	
 	Mat src, dst0, dst1;
@@ -59,7 +81,7 @@ int main(int argc, char* argv[])
 
 	imshow("Output", dst1);
 
-	waitKey();
+	waitKey();*/
 	return 0;
 }
 
