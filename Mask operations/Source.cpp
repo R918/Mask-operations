@@ -17,11 +17,125 @@ static void help(char* progName)
 		<< progName << "[image_path -- deafault ../data/lena.jpg] [G -- grayscale]" << endl << endl;
 }
 
+
 void Sharpen(const Mat& myImage, Mat& Result);
+
+namespace
+{
+	int alpha = 100;
+	int beta = 100;
+	int gamma_cor = 100;
+	Mat img_original, img_corrected, img_gamma_corrected;
+
+	void basicLinearTransform(const Mat &img, const double alpha_, const int beta_)
+	{
+		Mat res;
+		img.convertTo(res, -1, alpha_, beta_);
+
+		hconcat(img, res, img_corrected);
+	}
+	
+	void gammaCorrection(const Mat &img, const double gamma_)
+	{
+		CV_Assert(gamma_ >= 0);
+
+		Mat lookUpTable(1, 256, CV_8U);
+		uchar* p = lookUpTable.ptr();
+		for (int i = 0; i < 256; ++i)
+		{
+			p[i] = saturate_cast<uchar>(pow(i / 255.0, gamma_) * 255.0);
+		}
+		Mat res = img.clone();
+		LUT(img, lookUpTable, res);
+
+		hconcat(img, res, img_gamma_corrected);
+	}
+
+	void on_linear_transform_alpha_trackbar(int, void*)
+	{
+		double alpha_value = alpha / 100.0;
+		int beta_value = beta - 100;
+		basicLinearTransform(img_original, alpha_value, beta_value);
+	}
+
+	void on_linear_transform_beta_trackbar(int, void *)
+	{
+		double alpha_value = alpha / 100.0;
+		int beta_value = beta - 100;
+		basicLinearTransform(img_original, alpha_value, beta_value);
+	}
+
+	void on_gamma_correction_trackbar(int, void*)
+	{
+		double gamma_value = gamma_cor / 100.0;
+		gammaCorrection(img_original, gamma_value);
+	}
+}
 
 int main(int argc, char* argv[])
 {
-	double alpha = 0.5, beta, input;
+	//changing constrast & brightness
+
+	String imageName = "Lena.png";
+	if (argc > 1)
+	{
+		imageName = argv[1];
+	}
+
+	img_original = imread(imageName);
+	img_corrected = Mat(img_original.rows, img_original.cols * 2, img_original.type());
+	img_gamma_corrected = Mat(img_original.rows, img_original.cols * 2, img_original.type());
+
+	hconcat(img_original, img_original, img_corrected);
+	hconcat(img_original, img_original, img_gamma_corrected);
+
+	namedWindow("Brightness and contrast adjustments", WINDOW_AUTOSIZE);
+	namedWindow("Gamma correction", WINDOW_AUTOSIZE);
+
+	createTrackbar("Alpha gain (contrast)", "Brightness and contrast adjustments", &alpha, 500, on_linear_transform_alpha_trackbar);
+	createTrackbar("Beta bias (brightness)", "Brightness and contrast adjustments", &beta, 200, on_linear_transform_beta_trackbar);
+	createTrackbar("Gamma correction", "Gamma correction", &gamma_cor, 200, on_gamma_correction_trackbar);
+
+	while (true)
+	{
+		imshow("Brightness and contrast adjustments", img_corrected);
+		imshow("Gamma correction", img_gamma_corrected);
+
+		int c = waitKey(30);
+		if (c == 27)
+			break;
+	}
+	//Linear transform
+
+	/*double alpha = 1.0;
+	int beta = 0;
+	String imageName = "Lena.png";
+	if (argc > 1)
+	{
+		imageName = argv[1];
+	}
+	Mat image = imread(imageName);
+	Mat new_image = Mat::zeros(image.size(), image.type());
+
+	cout << "Basic Linear Transforms" << endl;
+	cout << "-----------------------" << endl;
+	cout << "* Enter the alpha value [1.0 - 3.0]: "; cin >> alpha;
+	cout << "* Enter the beta value [0 - 100]: "; cin >> beta;
+
+	for (int y = 0; y < image.rows; ++y) {
+		for (int x = 0; x < image.cols; ++x) {
+			for (int c = 0; c < 3; c++)
+				new_image.at<Vec3b>(y, x)[c] =
+				saturate_cast<uchar>(alpha*(image.at<Vec3b>(y, x)[c]) + beta);
+		}
+	}
+	namedWindow("Original Image", WINDOW_AUTOSIZE);
+	namedWindow("New Image", WINDOW_AUTOSIZE);
+
+	imshow("Original Image", image);
+	imshow("New Image", new_image);
+	waitKey();*/ 
+	/*double alpha = 0.5, beta, input;
 	Mat src1, src2, dst;
 	cout << "Simple Linear Blender" << endl;
 	cout << "---------------------" << endl;
@@ -45,7 +159,10 @@ int main(int argc, char* argv[])
 	beta = (1.0 - alpha);
 	addWeighted(src1, alpha, src2, beta, 0.0, dst);
 	imshow("Linear Blend", dst);
-	waitKey(100000);
+	waitKey();*/
+
+	// Mat operations
+
 	/*const char* filename = argc >= 2 ? argv[1] : "Lena.png";
 	Mat img = imread(filename, IMREAD_COLOR);
 	namedWindow("Input", WINDOW_AUTOSIZE);
@@ -68,6 +185,9 @@ int main(int argc, char* argv[])
 	namedWindow("SmallImage", WINDOW_AUTOSIZE);
 	imshow("SmallImage", smallImg);
 	waitKey();*/
+
+	//Mask operations
+
 	/*help(argv[0]);
 	const char* filename = argc >= 2 ? argv[1] : "Lena.png";
 	
