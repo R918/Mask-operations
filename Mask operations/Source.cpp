@@ -21,7 +21,35 @@ void Sharpen(const Mat& myImage, Mat& Result);
 
 int main(int argc, char* argv[])
 {
-	double alpha = 0.5, beta, input;
+	double alpha = 1.0;
+	int beta = 0;
+	String imageName = "Lena.png";
+	if (argc > 1)
+	{
+		imageName = argv[1];
+	}
+	Mat image = imread(imageName);
+	Mat new_image = Mat::zeros(image.size(), image.type());
+
+	cout << "Basic Linear Transforms" << endl;
+	cout << "-----------------------" << endl;
+	cout << "* Enter the alpha value [1.0 - 3.0]: "; cin >> alpha;
+	cout << "* Enter the beta value [0 - 100]: "; cin >> beta;
+
+	for (int y = 0; y < image.rows; ++y) {
+		for (int x = 0; x < image.cols; ++x) {
+			for (int c = 0; c < 3; c++)
+				new_image.at<Vec3b>(y, x)[c] =
+				saturate_cast<uchar>(alpha*(image.at<Vec3b>(y, x)[c]) + beta);
+		}
+	}
+	namedWindow("Original Image", WINDOW_AUTOSIZE);
+	namedWindow("New Image", WINDOW_AUTOSIZE);
+
+	imshow("Original Image", image);
+	imshow("New Image", new_image);
+	waitKey();
+	/*double alpha = 0.5, beta, input;
 	Mat src1, src2, dst;
 	cout << "Simple Linear Blender" << endl;
 	cout << "---------------------" << endl;
@@ -45,7 +73,7 @@ int main(int argc, char* argv[])
 	beta = (1.0 - alpha);
 	addWeighted(src1, alpha, src2, beta, 0.0, dst);
 	imshow("Linear Blend", dst);
-	waitKey(100000);
+	waitKey();*/
 	/*const char* filename = argc >= 2 ? argv[1] : "Lena.png";
 	Mat img = imread(filename, IMREAD_COLOR);
 	namedWindow("Input", WINDOW_AUTOSIZE);
