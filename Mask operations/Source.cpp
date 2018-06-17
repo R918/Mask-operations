@@ -81,149 +81,9 @@ void MyLine(Mat img, Point start, Point end);
 
 int main(int argc, char* argv[])
 {
-	//Drawing
-	
-
-	char atom_window[] = "Drawing 1: Atom";
-	char rook_window[] = "Drawing 2: Rook";
-	Mat atom_image = Mat::zeros(w, w, CV_8UC3);
-	Mat rook_image = Mat::zeros(w, w, CV_8UC3);
-	MyEllipse(atom_image, 90);
-	MyEllipse(atom_image, 0);
-	MyEllipse(atom_image, 45);
-	MyEllipse(atom_image, -45);
-	MyFilledCircle(atom_image, Point(w / 2, w / 2));
-	MyPolygon(rook_image);
-	rectangle(rook_image,
-		Point(0, 7 * w / 8),
-		Point(w, w),
-		Scalar(0, 255, 255),
-		FILLED,
-		LINE_8);
-	MyLine(rook_image, Point(0, 15 * w / 16), Point(w, 15 * w / 16));
-	MyLine(rook_image, Point(w / 4, 7 * w / 8), Point(w / 4, w));
-	MyLine(rook_image, Point(w / 2, 7 * w / 8), Point(w / 2, w));
-	MyLine(rook_image, Point(3 * w / 4, 7 * w / 8), Point(3 * w / 4, w));
-	imshow(atom_window, atom_image);
-	moveWindow(atom_window, 0, 200);
-	imshow(rook_window, rook_image);
-	moveWindow(rook_window, w, 200);
-	waitKey();
-	//changing constrast & brightness
-
-	/*String imageName = "Lena.png";
-	if (argc > 1)
-	{
-		imageName = argv[1];
-	}
-
-	img_original = imread(imageName);
-	img_corrected = Mat(img_original.rows, img_original.cols * 2, img_original.type());
-	img_gamma_corrected = Mat(img_original.rows, img_original.cols * 2, img_original.type());
-
-	hconcat(img_original, img_original, img_corrected);
-	hconcat(img_original, img_original, img_gamma_corrected);
-
-	namedWindow("Brightness and contrast adjustments", WINDOW_AUTOSIZE);
-	namedWindow("Gamma correction", WINDOW_AUTOSIZE);
-
-	createTrackbar("Alpha gain (contrast)", "Brightness and contrast adjustments", &alpha, 500, on_linear_transform_alpha_trackbar);
-	createTrackbar("Beta bias (brightness)", "Brightness and contrast adjustments", &beta, 200, on_linear_transform_beta_trackbar);
-	createTrackbar("Gamma correction", "Gamma correction", &gamma_cor, 200, on_gamma_correction_trackbar);
-
-	while (true)
-	{
-		imshow("Brightness and contrast adjustments", img_corrected);
-		imshow("Gamma correction", img_gamma_corrected);
-
-		int c = waitKey(30);
-		if (c == 27)
-			break;
-	}*/
-	//Linear transform
-
-	/*double alpha = 1.0;
-	int beta = 0;
-	String imageName = "Lena.png";
-	if (argc > 1)
-	{
-		imageName = argv[1];
-	}
-	Mat image = imread(imageName);
-	Mat new_image = Mat::zeros(image.size(), image.type());
-
-	cout << "Basic Linear Transforms" << endl;
-	cout << "-----------------------" << endl;
-	cout << "* Enter the alpha value [1.0 - 3.0]: "; cin >> alpha;
-	cout << "* Enter the beta value [0 - 100]: "; cin >> beta;
-
-	for (int y = 0; y < image.rows; ++y) {
-		for (int x = 0; x < image.cols; ++x) {
-			for (int c = 0; c < 3; c++)
-				new_image.at<Vec3b>(y, x)[c] =
-				saturate_cast<uchar>(alpha*(image.at<Vec3b>(y, x)[c]) + beta);
-		}
-	}
-	namedWindow("Original Image", WINDOW_AUTOSIZE);
-	namedWindow("New Image", WINDOW_AUTOSIZE);
-
-	imshow("Original Image", image);
-	imshow("New Image", new_image);
-	waitKey();*/ 
-	/*double alpha = 0.5, beta, input;
-	Mat src1, src2, dst;
-	cout << "Simple Linear Blender" << endl;
-	cout << "---------------------" << endl;
-	cout << "* Enter alpha [0.0 - 1.0]:	" << endl;
-	cin >> input;
-	if (input >= 0 && input <= 1)
-		alpha = input;
-	src1 = imread("LinuxLogo.jpg");
-	src2 = imread("WindowsLogo.jpg");
-	
-	if (src1.empty())
-	{
-		cout << "Error loading src1\n";
-		return -1;
-	}
-	if (src2.empty())
-	{
-		cout << "Error loading src2\n";
-		return -1;
-	}
-	beta = (1.0 - alpha);
-	addWeighted(src1, alpha, src2, beta, 0.0, dst);
-	imshow("Linear Blend", dst);
-	waitKey();*/
-
-	// Mat operations
-
-	/*const char* filename = argc >= 2 ? argv[1] : "Lena.png";
-	Mat img = imread(filename, IMREAD_COLOR);
-	namedWindow("Input", WINDOW_AUTOSIZE);
-	imshow("Input", img);
-	
-	Scalar intensity = img.at<uchar>(0, 0);
-	Vec3b intensity1 = img.at<Vec3b>(0, 0);
-	cout << "intensity : " << intensity << "  1:" << intensity1 << endl;
-	uchar blue = intensity1.val[0];
-	uchar green = intensity1.val[1];
-	uchar red = intensity1.val[2];
-	cout << intensity.val[0] << "  " << intensity.val[1] << " " << intensity.val[2] << endl
-		<< "blue: " << blue << "green: " << green << "red:	" << red;
-	Mat sobelx;
-	Sobel(img, sobelx, CV_32F, 1, 0);
-	namedWindow("Sobel", WINDOW_AUTOSIZE);
-	imshow("Sobel", sobelx);
-	Rect r(20, 20, 100, 100);
-	Mat smallImg = img(r);
-	namedWindow("SmallImage", WINDOW_AUTOSIZE);
-	imshow("SmallImage", smallImg);
-	waitKey();*/
-
 	//Mask operations
 
-	/*help(argv[0]);
+	help(argv[0]);
 	const char* filename = argc >= 2 ? argv[1] : "Lena.png";
 	
 	Mat src, dst0, dst1;
@@ -263,8 +123,147 @@ int main(int argc, char* argv[])
 
 	imshow("Output", dst1);
 
-	waitKey();*/
+	waitKey();
 	return 0;
+	//Drawing
+
+
+	/*char atom_window[] = "Drawing 1: Atom";
+	char rook_window[] = "Drawing 2: Rook";
+	Mat atom_image = Mat::zeros(w, w, CV_8UC3);
+	Mat rook_image = Mat::zeros(w, w, CV_8UC3);
+	MyEllipse(atom_image, 90);
+	MyEllipse(atom_image, 0);
+	MyEllipse(atom_image, 45);
+	MyEllipse(atom_image, -45);
+	MyFilledCircle(atom_image, Point(w / 2, w / 2));
+	MyPolygon(rook_image);
+	rectangle(rook_image,
+	Point(0, 7 * w / 8),
+	Point(w, w),
+	Scalar(0, 255, 255),
+	FILLED,
+	LINE_8);
+	MyLine(rook_image, Point(0, 15 * w / 16), Point(w, 15 * w / 16));
+	MyLine(rook_image, Point(w / 4, 7 * w / 8), Point(w / 4, w));
+	MyLine(rook_image, Point(w / 2, 7 * w / 8), Point(w / 2, w));
+	MyLine(rook_image, Point(3 * w / 4, 7 * w / 8), Point(3 * w / 4, w));
+	imshow(atom_window, atom_image);
+	moveWindow(atom_window, 0, 200);
+	imshow(rook_window, rook_image);
+	moveWindow(rook_window, w, 200);
+	waitKey();*/
+	//changing constrast & brightness
+
+	/*String imageName = "Lena.png";
+	if (argc > 1)
+	{
+	imageName = argv[1];
+	}
+
+	img_original = imread(imageName);
+	img_corrected = Mat(img_original.rows, img_original.cols * 2, img_original.type());
+	img_gamma_corrected = Mat(img_original.rows, img_original.cols * 2, img_original.type());
+
+	hconcat(img_original, img_original, img_corrected);
+	hconcat(img_original, img_original, img_gamma_corrected);
+
+	namedWindow("Brightness and contrast adjustments", WINDOW_AUTOSIZE);
+	namedWindow("Gamma correction", WINDOW_AUTOSIZE);
+
+	createTrackbar("Alpha gain (contrast)", "Brightness and contrast adjustments", &alpha, 500, on_linear_transform_alpha_trackbar);
+	createTrackbar("Beta bias (brightness)", "Brightness and contrast adjustments", &beta, 200, on_linear_transform_beta_trackbar);
+	createTrackbar("Gamma correction", "Gamma correction", &gamma_cor, 200, on_gamma_correction_trackbar);
+
+	while (true)
+	{
+	imshow("Brightness and contrast adjustments", img_corrected);
+	imshow("Gamma correction", img_gamma_corrected);
+
+	int c = waitKey(30);
+	if (c == 27)
+	break;
+	}*/
+	//Linear transform
+
+	/*double alpha = 1.0;
+	int beta = 0;
+	String imageName = "Lena.png";
+	if (argc > 1)
+	{
+	imageName = argv[1];
+	}
+	Mat image = imread(imageName);
+	Mat new_image = Mat::zeros(image.size(), image.type());
+
+	cout << "Basic Linear Transforms" << endl;
+	cout << "-----------------------" << endl;
+	cout << "* Enter the alpha value [1.0 - 3.0]: "; cin >> alpha;
+	cout << "* Enter the beta value [0 - 100]: "; cin >> beta;
+
+	for (int y = 0; y < image.rows; ++y) {
+	for (int x = 0; x < image.cols; ++x) {
+	for (int c = 0; c < 3; c++)
+	new_image.at<Vec3b>(y, x)[c] =
+	saturate_cast<uchar>(alpha*(image.at<Vec3b>(y, x)[c]) + beta);
+	}
+	}
+	namedWindow("Original Image", WINDOW_AUTOSIZE);
+	namedWindow("New Image", WINDOW_AUTOSIZE);
+
+	imshow("Original Image", image);
+	imshow("New Image", new_image);
+	waitKey();*/
+	/*double alpha = 0.5, beta, input;
+	Mat src1, src2, dst;
+	cout << "Simple Linear Blender" << endl;
+	cout << "---------------------" << endl;
+	cout << "* Enter alpha [0.0 - 1.0]:	" << endl;
+	cin >> input;
+	if (input >= 0 && input <= 1)
+	alpha = input;
+	src1 = imread("LinuxLogo.jpg");
+	src2 = imread("WindowsLogo.jpg");
+
+	if (src1.empty())
+	{
+	cout << "Error loading src1\n";
+	return -1;
+	}
+	if (src2.empty())
+	{
+	cout << "Error loading src2\n";
+	return -1;
+	}
+	beta = (1.0 - alpha);
+	addWeighted(src1, alpha, src2, beta, 0.0, dst);
+	imshow("Linear Blend", dst);
+	waitKey();*/
+
+	// Mat operations
+
+	/*const char* filename = argc >= 2 ? argv[1] : "Lena.png";
+	Mat img = imread(filename, IMREAD_COLOR);
+	namedWindow("Input", WINDOW_AUTOSIZE);
+	imshow("Input", img);
+
+	Scalar intensity = img.at<uchar>(0, 0);
+	Vec3b intensity1 = img.at<Vec3b>(0, 0);
+	cout << "intensity : " << intensity << "  1:" << intensity1 << endl;
+	uchar blue = intensity1.val[0];
+	uchar green = intensity1.val[1];
+	uchar red = intensity1.val[2];
+	cout << intensity.val[0] << "  " << intensity.val[1] << " " << intensity.val[2] << endl
+	<< "blue: " << blue << "green: " << green << "red:	" << red;
+	Mat sobelx;
+	Sobel(img, sobelx, CV_32F, 1, 0);
+	namedWindow("Sobel", WINDOW_AUTOSIZE);
+	imshow("Sobel", sobelx);
+	Rect r(20, 20, 100, 100);
+	Mat smallImg = img(r);
+	namedWindow("SmallImage", WINDOW_AUTOSIZE);
+	imshow("SmallImage", smallImg);
+	waitKey();*/
 }
 
 void MyEllipse(Mat img, double angle)
